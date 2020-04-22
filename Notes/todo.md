@@ -1,7 +1,11 @@
 # David
 will do the quick sort
+show dru how to keep a single react project with multiple sub react project inside.
 
-# dru
+# Dru
+read through the react docs here https://reactjs.org/docs/hello-world.html
+and then https://reactjs.org/docs/hooks-intro.html
+
 will do the heap sort 
 * add:
 color picker
@@ -9,14 +13,9 @@ array size slider
 speed slider
 implement width of columns change to fill screen the fewer columns there are.
 
-
-# stuff to do at some point
+# stuff to do in the distant future.
 add time and space complexity information...
-
-
-
-
-
+add a pause play button...
 
 
 
