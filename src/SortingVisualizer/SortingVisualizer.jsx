@@ -6,7 +6,7 @@ import './SortingVisualizer.css';
 const ANIMATION_SPEED_MS = 1;
 
 // Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 310;
+const NUMBER_OF_ARRAY_BARS = 10;
 
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'turquoise';
@@ -73,20 +73,22 @@ export default class SortingVisualizer extends React.Component {
     let interval = setInterval(function () {
       if (i < arrayBars.length - 1) {
         for(var b =0; b< arrayBars.length -i-1; b++){
-        console.log(arrayBars[b].style.height)
-        console.log(b);
-        if (parseInt(arrayBars[b].style.height) < parseInt(arrayBars[b + 1].style.height)) {
-          let temp1 = arrayBars[b].style.height
-          let temp2 = arrayBars[b + 1].style.height
-          arrayBars[b + 1].style.height = temp1
-          arrayBars[b].style.height = temp2
+        if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
+          document.getElementsByClassName("array-bar").backgroundColor = "turquoise"
+          let temp1 = arrayBars[b]
+          let temp2 = arrayBars[b + 1]
+          arrayBars[b + 1].style.height = temp1.style.height
+          arrayBars[b].style.height = temp2.style.height
+          arrayBars[b].style.backgroundColor = 'red'
+         
+
         }
       }
         i++
       } else {
         clearInterval(interval)
       }
-    }, 10);
+    }, 100);
     // function setter(newstate) {
     //   this.setState({ array: newstate })
     // }
