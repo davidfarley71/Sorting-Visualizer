@@ -1,5 +1,5 @@
 import React from 'react';
-import {getMergeSortAnimations} from '../sortingAlgorithms/sortingAlgorithms.js';
+import { getMergeSortAnimations } from '../sortingAlgorithms/sortingAlgorithms.js';
 import './SortingVisualizer.css';
 
 // Change this value for the speed of the animations.
@@ -32,7 +32,7 @@ export default class SortingVisualizer extends React.Component {
     for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
       array.push(randomIntFromInterval(5, 730));
     }
-    this.setState({array});
+    this.setState({ array });
   }
 
   mergeSort() {
@@ -59,6 +59,51 @@ export default class SortingVisualizer extends React.Component {
     }
   }
 
+  selectionSort() {
+    const arr = document.getElementsByClassName(`array-bar`)
+    //function to sort an array
+    console.log(arr)
+      //setting variable to equal the length of the array
+      const len = arr.length
+      //setting up an array deconstructor to swap the places passed in
+      const swap = (arr, indx1, indx2) =>
+        //array deconstructor to define what will be swapped
+        ([arr[indx1], arr[indx2]] = [arr[indx2], arr[indx1]])
+
+      //create a loop for the array
+      for (let i = 0; i < len -1; i++) {
+        //setting a postion for the index's smallest location
+        let indxOfMin = i
+        var time = setInterval(function () {
+        //looping through the rest of the array on top of first position
+        for (let j = i + 1; j < len -i -1; j++) {
+          // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
+          if (parseInt(arr[j].style.height) > parseInt(arr[j + 1].style.height)) {
+            //console.log(arr)
+            indxOfMin = j
+            let temp1 = arr[j].style.height
+            let temp2 = arr[j + 1].style.height
+            arr[j + 1].style.height = temp1
+            arr[j + 1].style.backgroundColor = 'red'
+            arr[j].style.height = temp2
+            arr[j].style.backgroundColor = 'turquoise'
+            if (j === arr.length - i) arr[j + 1].style.backgroundColor = 'turquoise'
+            return
+          }
+        }
+
+        //if the index isn't less than our current number then we do the switch
+        if (indxOfMin !== i) swap(arr, indxOfMin, i)
+      }, 100)
+      
+    }
+    clearInterval(time)
+      //returns the array newly sorted
+      
+    }
+    
+
+
   quickSort() {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
@@ -67,40 +112,40 @@ export default class SortingVisualizer extends React.Component {
     // We leave it as an exercise to the viewer of this code to implement this method.
   }
 
-  bubbleSort(){
+  bubbleSort() {
     var arrayBars = document.getElementsByClassName('array-bar');
     var i = 0;
     let interval = setInterval(function () {
       if (i < arrayBars.length - 1) {
-        for(var b =0; b< arrayBars.length -i-1; b++){
-        if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
-          // document.getElementById("array-bar").backgroundColor = "turquoise"
-          let temp1 = arrayBars[b].style.height
-          let temp2 = arrayBars[b + 1].style.height
-          arrayBars[b + 1].style.height = temp1
-          arrayBars[b + 1].style.backgroundColor = 'red'
-          arrayBars[b].style.height = temp2
-          arrayBars[b].style.backgroundColor = 'turquoise'
-          if(b == arrayBars.length-i)arrayBars[b + 1].style.backgroundColor = 'turquoise'
+        for (var b = 0; b < arrayBars.length - i - 1; b++) {
+          if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
+            // document.getElementById("array-bar").backgroundColor = "turquoise"
+            let temp1 = arrayBars[b].style.height
+            let temp2 = arrayBars[b + 1].style.height
+            arrayBars[b + 1].style.height = temp1
+            arrayBars[b + 1].style.backgroundColor = 'red'
+            arrayBars[b].style.height = temp2
+            arrayBars[b].style.backgroundColor = 'turquoise'
+            if (b === arrayBars.length - i) arrayBars[b + 1].style.backgroundColor = 'turquoise'
 
+          }
         }
-      }
         i++
       } else {
         clearInterval(interval)
       }
-    }, 900);
+    }, 100);
     // function setter(newstate) {
     //   this.setState({ array: newstate })
     // }
     // const update = (newstate) => {  this.setState({ array: newstate })}
-     
+
 
     // var arrayBars = this.state.array;
     // var i = 0;
     // var arrayreturn = this.state.array;
     // let interval = setInterval(function () {
-    
+
     //   arrayreturn[0] = 5;
     //   update(arrayreturn)
     //   const update = () => { setter(arrayreturn ) }
@@ -127,7 +172,7 @@ export default class SortingVisualizer extends React.Component {
     // }, 10);
   }
 
-  
+
   // NOTE: This method will only work if your sorting algorithms actually return
   // the sorted arrays; if they return the animations (as they currently do), then
   // this method will be broken.
@@ -145,7 +190,7 @@ export default class SortingVisualizer extends React.Component {
   }
 
   render() {
-    const {array} = this.state;
+    const { array } = this.state;
 
     return (
       <div className="array-container">
@@ -163,6 +208,7 @@ export default class SortingVisualizer extends React.Component {
         <button onClick={() => this.quickSort()}>Quick Sort</button>
         <button onClick={() => this.heapSort()}>Heap Sort</button>
         <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+        <button onClick={() => this.selectionSort()}>selectionSort</button>
         <button onClick={() => this.testSortingAlgorithms()}>
           Test Sorting Algorithms (BROKEN)
         </button>
