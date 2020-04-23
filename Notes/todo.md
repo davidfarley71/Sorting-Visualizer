@@ -16,7 +16,7 @@ implement width of columns change to fill screen the fewer columns there are.
 # stuff to do in the distant future.
 add time and space complexity information...
 add a pause play button...
-
+add the pathfinder visualizer! https://www.youtube.com/watch?v=msttfIHHkak
 
 
 
