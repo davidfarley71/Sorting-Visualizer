@@ -13,6 +13,12 @@ array size slider
 speed slider
 implement width of columns change to fill screen the fewer columns there are.
 
+
+# bugs
+* fix it so generate new array stops whatever sort in progress
+* generate new array should reset background colors
+* 
+
 # stuff to do in the distant future.
 add time and space complexity information...
 add a pause play button...
