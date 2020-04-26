@@ -16,6 +16,9 @@ const PRIMARY_COLOR = 'turquoise';
 // This is the color of array bars that are being compared throughout the animations.
 const SECONDARY_COLOR = 'red';
 
+// have to promisify the setTimeout Method so we can use it with async await.
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
 export default class SortingVisualizer extends React.Component {
     constructor(props) {
         super(props);
@@ -113,24 +116,22 @@ export default class SortingVisualizer extends React.Component {
     }
 
     async bubbleSort() {
-        const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
         var arrayBars = document.getElementsByClassName('array-bar');
-        console.log(arrayBars[99])
         for (let i = 0; i < arrayBars.length - 1; i++) {
-            let b = 0
+            let b = 0;
             console.log(`outer loop: ${i}`)
             while (b < arrayBars.length - i - 1) {
                 console.log(`inner loop: ${b}`)
                 if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
-                    let temp1 = arrayBars[b].style.height
-                    let temp2 = arrayBars[b + 1].style.height
-                    arrayBars[b + 1].style.height = temp1
-                    arrayBars[b].style.height = temp2
+                    let temp1 = arrayBars[b].style.height;
+                    let temp2 = arrayBars[b + 1].style.height;
+                    arrayBars[b + 1].style.height = temp1;
+                    arrayBars[b].style.height = temp2;
                 }
-                arrayBars[b + 1].style.backgroundColor = 'green'
-                arrayBars[b].style.backgroundColor = 'turquoise'
+                arrayBars[b + 1].style.backgroundColor = SECONDARY_COLOR;
+                arrayBars[b].style.backgroundColor = PRIMARY_COLOR;
                 await sleep(VariableAnimationSpeed)
-                ++b
+                ++b;
             }
         };
         arrayBars[0].style.backgroundColor = 'green'
