@@ -17,12 +17,13 @@ implement width of columns change to fill screen the fewer columns there are.
 # bugs
 * fix it so generate new array stops whatever sort in progress
 * generate new array should reset background colors
-* 
+* Set a disabled attribute on the sort button until the sort is finished.
 
 # stuff to do in the distant future.
 add time and space complexity information...
 add a pause play button...
 add the pathfinder visualizer! https://www.youtube.com/watch?v=msttfIHHkak
+Write a good readMe.
 
 
 
