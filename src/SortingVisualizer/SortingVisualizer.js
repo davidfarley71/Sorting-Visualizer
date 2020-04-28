@@ -64,7 +64,7 @@ export default class SortingVisualizer extends React.Component {
         }
     }
 
-    selectionSort() {
+    async selectionSort() {
         const arr = document.getElementsByClassName('array-bar')
         
         const len = arr.length
@@ -83,7 +83,10 @@ export default class SortingVisualizer extends React.Component {
                    
                     // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
                     if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)){
+                        arr[indxOfMin].style.backgroundColor = SECONDARY_COLOR
+                        arr[i].style.backgroundColor = PRIMARY_COLOR
                         indxOfMin = j
+                        
                         
                     } 
                 }
@@ -92,11 +95,13 @@ export default class SortingVisualizer extends React.Component {
                 if (indxOfMin !== i) {
                     console.log(`switch hit`)
                     swap(arr, indxOfMin, i)
+                    await sleep(1000)
                 }
-                sleep(VariableAnimationSpeed)
+                
             }
             //returns the array newly sorted
-            return arr
+            return
+            
         
     }
 
