@@ -65,44 +65,39 @@ export default class SortingVisualizer extends React.Component {
     }
 
     selectionSort() {
-        const arr = document.getElementsByClassName(`array-bar`)
-        //function to sort an array
-        console.log(arr)
-        //setting variable to equal the length of the array
+        const arr = document.getElementsByClassName('array-bar')
+        
         const len = arr.length
-        //setting up an array deconstructor to swap the places passed in
-        const swap = (arr, indx1, indx2) =>
-            //array deconstructor to define what will be swapped
-            ([arr[indx1], arr[indx2]] = [arr[indx2], arr[indx1]])
+            //setting up an array deconstructor to swap the places passed in
+            const swap = (arr, indx1, indx2) =>
+                //array deconstructor to define what will be swapped
+                ([arr[indx1].style.height, arr[indx2].style.height] = [arr[indx2].style.height, arr[indx1].style.height])
 
-        //create a loop for the array
-        for (let i = 0; i < len - 1; i++) {
-            //setting a postion for the index's smallest location
-            let indxOfMin = i
-            var time = setInterval(function () {
+            //create a loop for the array
+            for (let i = 0; i < len; i++) {
+                //setting a postion for the index's smallest location
+                let indxOfMin = i
+                
                 //looping through the rest of the array on top of first position
-                for (let j = i + 1; j < len - i - 1; j++) {
+                for (let j = i + 1; j < len; j++) {
+                   
                     // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
-                    if (parseInt(arr[j].style.height) > parseInt(arr[j + 1].style.height)) {
-                        //console.log(arr)
+                    if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)){
                         indxOfMin = j
-                        let temp1 = arr[j].style.height
-                        let temp2 = arr[j + 1].style.height
-                        arr[j + 1].style.height = temp1
-                        arr[j + 1].style.backgroundColor = 'red'
-                        arr[j].style.height = temp2
-                        arr[j].style.backgroundColor = 'turquoise'
-                        if (j === arr.length - i) arr[j + 1].style.backgroundColor = 'turquoise'
-                        return
-                    }
+                        
+                    } 
                 }
 
                 //if the index isn't less than our current number then we do the switch
-                if (indxOfMin !== i) swap(arr, indxOfMin, i)
-            }, 100)
-        }
-        clearInterval(time)
-        //returns the array newly sorted
+                if (indxOfMin !== i) {
+                    console.log(`switch hit`)
+                    swap(arr, indxOfMin, i)
+                }
+                sleep(VariableAnimationSpeed)
+            }
+            //returns the array newly sorted
+            return arr
+        
     }
 
 
