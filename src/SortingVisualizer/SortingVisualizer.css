@@ -5,7 +5,11 @@
 }
 
 .array-bar {
-  width: 2px;
+  width: 1rem;
   display: inline-block;
   margin: 0 1px;
+}
+
+.button {
+  background-color: blue;
 }

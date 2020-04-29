@@ -85,8 +85,6 @@ export default class SortingVisualizer extends React.Component {
                 // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
                 if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)) {
                     arr[j].style.backgroundColor = `purple`
-                    // await sleep(2000)
-                    //arr[j + 1].style.backgroundColor = `grey`
                     indxOfMin = j
                     
                 } 
@@ -96,7 +94,6 @@ export default class SortingVisualizer extends React.Component {
             if (indxOfMin !== i) {
                 console.log(`switch hit`)
                 swap(arr, indxOfMin, i)
-                //arr[indxOfMin].style.backgroundColor = `yellow`
                 await sleep(100)
             }
             arr[i].style.backgroundColor = `green`
