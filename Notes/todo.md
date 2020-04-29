@@ -13,6 +13,8 @@ array size slider
 speed slider
 implement width of columns change to fill screen the fewer columns there are.
 
+have a description of what each colour on each sort represents ie "purple means it's lower than our current index"
+
 
 # bugs
 * fix it so generate new array stops whatever sort in progress

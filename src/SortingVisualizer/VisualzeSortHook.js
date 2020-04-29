@@ -85,25 +85,25 @@ export default function VisualzeSortHook() {
     var arrayBars = array;
     var i = 0;
     var arrayreturn = array;
-    let interval = setInterval(()=> {
+    let interval = setInterval(() => {
 
-    //  setArray(arrayBars)
-     // setArray([5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9])
-      
+      //  setArray(arrayBars)
+      // setArray([5,6,7,8,9,1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9])
+
 
       if (i < arrayBars.length - 1) {
-        for(var b =0; b< arrayBars.length -i-1; b++){
-        console.log(arrayBars[b])
-        console.log(b);
-        if (arrayBars[b] < arrayBars[b + 1] ) {
-          let temp1 = arrayBars[b]
-          let temp2 = arrayBars[b + 1]
-          arrayBars[b + 1] = temp1
-          arrayBars[b] = temp2
+        for (var b = 0; b < arrayBars.length - i - 1; b++) {
+          console.log(arrayBars[b])
+          console.log(b);
+          if (arrayBars[b] < arrayBars[b + 1]) {
+            let temp1 = arrayBars[b]
+            let temp2 = arrayBars[b + 1]
+            arrayBars[b + 1] = temp1
+            arrayBars[b] = temp2
+          }
+
+          update(arrayBars)
         }
-     
-        update(arrayBars)
-      }
         i++
       } else {
         clearInterval(interval)
@@ -111,7 +111,7 @@ export default function VisualzeSortHook() {
     }, 10);
   }
 
-  const update = function(params){
+  const update = function (params) {
     setArray(params)
   }
 
@@ -146,12 +146,13 @@ export default function VisualzeSortHook() {
             height: `${value}px`,
           }}></div>
       ))}
-      <button onClick={() => resetArray()}>Generate New Array</button>
-      <button onClick={() => mergeSort()}>Merge Sort</button>
-      <button onClick={() => quickSort()}>Quick Sort</button>
-      <button onClick={() => heapSort()}>Heap Sort</button>
-      <button onClick={() => bubbleSort()}>Bubble Sort</button>
-
+      <div >
+        <button className="button" onClick={() => resetArray()}>Generate New Array</button>
+        <button className="button" onClick={() => mergeSort()}>Merge Sort</button>
+        <button className="button" onClick={() => quickSort()}>Quick Sort</button>
+        <button onClick={() => heapSort()}>Heap Sort</button>
+        <button onClick={() => bubbleSort()}>Bubble Sort</button>
+      </div>
     </div>
   );
 }

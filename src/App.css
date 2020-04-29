@@ -6,6 +6,12 @@
   height: 40vmin;
 }
 
+.container {
+display: grid;
+align-content: center;
+justify-content: center;
+}
+
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -19,4 +25,8 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+.button{
+  background-color: blue !important;
 }

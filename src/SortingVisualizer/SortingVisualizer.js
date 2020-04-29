@@ -75,26 +75,34 @@ export default class SortingVisualizer extends React.Component {
         //create a loop for the array
         for (let i = 0; i < len; i++) {
             //setting a postion for the index's smallest location
+            arr[i].style.backgroundColor = `grey`
             let indxOfMin = i
             //looping through the rest of the array on top of first position
             for (let j = i + 1; j < len; j++) {
+                arr[j].style.backgroundColor = `yellow`
+                    await sleep(25)
+                    arr[j].style.backgroundColor = PRIMARY_COLOR
                 // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
                 if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)) {
-                    arr[indxOfMin].style.backgroundColor = SECONDARY_COLOR
-                    arr[i].style.backgroundColor = PRIMARY_COLOR
+                    arr[j].style.backgroundColor = `purple`
+                    // await sleep(2000)
+                    //arr[j + 1].style.backgroundColor = `grey`
                     indxOfMin = j
-                }
+                    
+                } 
+                
             }
-            //if the index isn't less than our current number then we do the switch
+            
             if (indxOfMin !== i) {
                 console.log(`switch hit`)
                 swap(arr, indxOfMin, i)
-                arr[indxOfMin].style.backgroundColor = PRIMARY_COLOR
-                arr[i].style.backgroundColor = SECONDARY_COLOR
-                await sleep(1000)
+                //arr[indxOfMin].style.backgroundColor = `yellow`
+                await sleep(100)
             }
+            arr[i].style.backgroundColor = `green`
         }
         //returns the array newly sorted
+        
         return
     }
 
