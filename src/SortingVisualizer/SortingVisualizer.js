@@ -7,6 +7,8 @@ const ANIMATION_SPEED_MS = 1;
 
 let VariableAnimationSpeed = 10;
 
+let executing = true
+
 // Change this value for the number of bars (value) in the array.
 const NUMBER_OF_ARRAY_BARS = 100;
 
@@ -43,14 +45,23 @@ export default class SortingVisualizer extends React.Component {
     resetArray() {
         const array = [];
         for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
+
             array.push(randomIntFromInterval(5, 730));
         }
         this.setState({ array });
     }
 
+    async checkExecution(){
+        executing = false 
+        await sleep(500)
+        executing = true
+    }
+
     mergeSort() {
+        this.checkExecution()
         const animations = getMergeSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
+            if(executing) return
             const arrayBars = document.getElementsByClassName('array-bar');
             const isColorChange = i % 3 !== 2;
             if (isColorChange) {
@@ -73,6 +84,8 @@ export default class SortingVisualizer extends React.Component {
     }
 
     async selectionSort() {
+        this.checkExecution()
+        await sleep(500)
         const arr = document.getElementsByClassName('array-bar')
         const len = arr.length
 
@@ -99,7 +112,8 @@ export default class SortingVisualizer extends React.Component {
             arr[i].style.backgroundColor = `grey`
             let indxOfMin = i
             //looping through the rest of the array on top of first position
-            for (let j = i + 1; j < len; j++) {
+            for (let j = i + 1; j < len; j++) {console.log(executing)
+                if(!executing) return
                 arr[j].style.backgroundColor = `yellow`
                 await sleep(5)
                 arr[j].style.backgroundColor = PRIMARY_COLOR
@@ -135,6 +149,7 @@ export default class SortingVisualizer extends React.Component {
     }
 
     async bubbleSort() {
+        this.checkExecution()
         var arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < arrayBars.length - 1; i++) {
             let b = 0;
@@ -142,6 +157,7 @@ export default class SortingVisualizer extends React.Component {
             while (b < arrayBars.length - i - 1) {
                 console.log(`inner loop: ${b}`)
                 if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
+                    if(!executing) return
                     let temp1 = arrayBars[b].style.height;
                     let temp2 = arrayBars[b + 1].style.height;
                     arrayBars[b + 1].style.height = temp1;
@@ -192,14 +208,7 @@ export default class SortingVisualizer extends React.Component {
                     ))}
                 </div>
 
-                <div className="description">
-                    <p className="title"></p>
-                    <p className="explanation"></p>
-                    <p className="color1"></p>
-                    <p className="color2"></p>
-                    <p className="color3"></p>
-                    <p className="color4"></p>
-                </div>
+                {this.state.title}
 
                 <div className="button-container">
                     <button className="button" onClick={() => this.resetArray()}>Generate New Array</button>
