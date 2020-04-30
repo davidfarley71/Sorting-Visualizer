@@ -85,12 +85,9 @@ export default class SortingVisualizer extends React.Component {
                 // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
                 if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)) {
                     arr[j].style.backgroundColor = `purple`
-                    indxOfMin = j
-                    
+                    indxOfMin = j  
                 } 
-                
             }
-            
             if (indxOfMin !== i) {
                 console.log(`switch hit`)
                 swap(arr, indxOfMin, i)
@@ -99,7 +96,6 @@ export default class SortingVisualizer extends React.Component {
             arr[i].style.backgroundColor = `green`
         }
         //returns the array newly sorted
-        
         return
     }
 
@@ -113,7 +109,36 @@ export default class SortingVisualizer extends React.Component {
         // We leave it as an exercise to the viewer of this code to implement this method.
     }
 
+    async insertionSort() {
+        var arrayBars = document.getElementsByClassName('array-bar');
+        for(let i = 1; i < arrayBars.length; i++){
+            let key = arrayBars[i].style.height ;
+
+            j = i-1;
+            while(j >= 0 && key < arrayBars[j].style.height ){
+                arrayBars[j+1] = arrayBars[j]
+                j-= 1
+            }
+            arrBars[j + 1].style.length = key;    
+
+        }
+        
+        // for i in range(1, len(arr)): 
+  
+        // key = arr[i] 
+  
+        // # Move elements of arr[0..i-1], that are 
+        // # greater than key, to one position ahead 
+        // # of their current position 
+        // j = i-1
+        // while j >= 0 and key < arr[j] : 
+        //         arr[j + 1] = arr[j] 
+        //         j -= 1
+        // arr[j + 1] = key 
+    }
+
     async bubbleSort() {
+        
         var arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < arrayBars.length - 1; i++) {
             let b = 0;
@@ -174,6 +199,7 @@ export default class SortingVisualizer extends React.Component {
                 <button onClick={() => this.heapSort()}>Heap Sort</button>
                 <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
                 <button onClick={() => this.selectionSort()}>selectionSort</button>
+                <button onClick={() => this.insertionSort()}>insertionSort</button>
                 <button onClick={() => this.testSortingAlgorithms()}>
                     Test Sorting Algorithms (BROKEN)
         </button>
