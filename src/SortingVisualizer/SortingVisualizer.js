@@ -7,6 +7,8 @@ const ANIMATION_SPEED_MS = 1;
 
 let VariableAnimationSpeed = 10;
 
+let executing = true
+
 // Change this value for the number of bars (value) in the array.
 const NUMBER_OF_ARRAY_BARS = 100;
 
@@ -25,7 +27,10 @@ export default class SortingVisualizer extends React.Component {
 
         this.state = {
             array: [],
-        };
+            title: <h1 className="description">
+                Select a sort to get started!
+            </h1>
+        }
     }
 
     componentDidMount() {
@@ -35,14 +40,24 @@ export default class SortingVisualizer extends React.Component {
     resetArray() {
         const array = [];
         for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
+
             array.push(randomIntFromInterval(5, 730));
         }
         this.setState({ array });
     }
 
+    async checkExecution() {
+        executing = false
+        await sleep(500)
+        executing = true
+        console.log('executing' + executing)
+    }
+
     mergeSort() {
+        this.checkExecution()
         const animations = getMergeSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
+            if (!executing) return
             const arrayBars = document.getElementsByClassName('array-bar');
             const isColorChange = i % 3 !== 2;
             if (isColorChange) {
@@ -65,8 +80,23 @@ export default class SortingVisualizer extends React.Component {
     }
 
     async selectionSort() {
+        this.checkExecution()
+        await sleep(500)
         const arr = document.getElementsByClassName('array-bar')
         const len = arr.length
+
+        //displaying a descrition of the type of sort
+        this.setState({
+            title: (<div className="description">
+                <p className="title">Selection Sort</p>
+                <p className="explanation">Finds the smallest element in the array and putting it at the beginning of the list and then repeating that process on the unsorted remainder of the data.</p>
+                <p className="color1">Green: Sorted</p>
+                <p className="color2">Grey: Current index being sorted</p>
+                <p className="color3">Yellow: Current scan</p>
+                <p className="color4">Purple: Possible hits</p>
+            </div>)
+        })
+
         //setting up an array deconstructor to swap the places passed in
         const swap = (arr, indx1, indx2) =>
             //array deconstructor to define what will be swapped
@@ -79,19 +109,23 @@ export default class SortingVisualizer extends React.Component {
             let indxOfMin = i
             //looping through the rest of the array on top of first position
             for (let j = i + 1; j < len; j++) {
+                if (!executing) return
                 arr[j].style.backgroundColor = `yellow`
-                    await sleep(25)
-                    arr[j].style.backgroundColor = PRIMARY_COLOR
+                await sleep(5)
+                arr[j].style.backgroundColor = PRIMARY_COLOR
                 // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
                 if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)) {
                     arr[j].style.backgroundColor = `purple`
-                    indxOfMin = j  
-                } 
+                    indxOfMin = j
+
+                }
+
             }
+
             if (indxOfMin !== i) {
                 console.log(`switch hit`)
                 swap(arr, indxOfMin, i)
-                await sleep(100)
+                //await sleep(100)
             }
             arr[i].style.backgroundColor = `green`
         }
@@ -110,40 +144,33 @@ export default class SortingVisualizer extends React.Component {
     }
 
     async insertionSort() {
+        await this.checkExecution()
         var arrayBars = document.getElementsByClassName('array-bar');
-        for(let i = 1; i < arrayBars.length; i++){
-            let j = i-1;
-            while(j >= 0 && parseInt(arrayBars[i].style.height) < parseInt(arrayBars[j].style.height)){
-                let temp1 = arrayBars[j+1].style.height;
+        arrayBars[0].style.backgroundColor = 'green'
+        for (let i = 1; i < arrayBars.length; i++) {
+            let j = i - 1;
+            console.log('outer' + i)
+            while (j >= 0 && parseInt(arrayBars[j + 1].style.height) < parseInt(arrayBars[j].style.height)) {
+                if (!executing) return
+                let temp1 = arrayBars[j + 1].style.height;
                 let temp2 = arrayBars[j].style.height;
-                arrayBars[j+1].style.height = temp2;
+                arrayBars[j + 1].style.height = temp2;
                 arrayBars[j].style.height = temp1;
-                j-= 1
+                arrayBars[j].style.backgroundColor = 'red'
+                j -= 1
+                await sleep(50)
             }
-           // arrayBars[j + 1].style.height = arrayBars[i].style.height;
         }
-        
-        // for i in range(1, len(arr)): 
-  
-        // key = arr[i] 
-  
-        // # Move elements of arr[0..i-1], that are 
-        // # greater than key, to one position ahead 
-        // # of their current position 
-        // j = i-1
-        // while j >= 0 and key < arr[j] : 
-        //         arr[j + 1] = arr[j] 
-        //         j -= 1
-        // arr[j + 1] = key 
     }
 
     async bubbleSort() {
-        
+        await this.checkExecution()
         var arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < arrayBars.length - 1; i++) {
             let b = 0;
             console.log(`outer loop: ${i}`)
             while (b < arrayBars.length - i - 1) {
+                if (!executing) return
                 console.log(`inner loop: ${b}`)
                 if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
                     let temp1 = arrayBars[b].style.height;
@@ -183,26 +210,34 @@ export default class SortingVisualizer extends React.Component {
         const { array } = this.state;
 
         return (
-            <div className="array-container">
-                {array.map((value, idx) => (
-                    <div
-                        className="array-bar"
-                        key={idx}
-                        style={{
-                            backgroundColor: PRIMARY_COLOR,
-                            height: `${value}px`,
-                        }}></div>
-                ))}
-                <button onClick={() => this.resetArray()}>Generate New Array</button>
-                <button onClick={() => this.mergeSort()}>Merge Sort</button>
-                <button onClick={() => this.quickSort()}>Quick Sort</button>
-                <button onClick={() => this.heapSort()}>Heap Sort</button>
-                <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-                <button onClick={() => this.selectionSort()}>selectionSort</button>
-                <button onClick={() => this.insertionSort()}>insertionSort</button>
-                <button onClick={() => this.testSortingAlgorithms()}>
-                    Test Sorting Algorithms (BROKEN)
+            <div className="container">
+                <div className="array-container">
+                    {array.map((value, idx) => (
+                        <div
+                            className="array-bar"
+                            key={idx}
+                            style={{
+                                backgroundColor: PRIMARY_COLOR,
+                                height: `${value}px`,
+                            }}></div>
+                    ))}
+                </div>
+
+                {this.state.title}
+
+                <div className="button-container">
+                    <button className="button" onClick={() => this.resetArray()}>Generate New Array</button>
+                    <button className="button" onClick={() => this.mergeSort()}>Merge Sort</button>
+                    <button className="button" onClick={() => this.quickSort()}>Quick Sort</button>
+                    <button className="button" onClick={() => this.heapSort()}>Heap Sort</button>
+                    <button className="button" onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                    <button className="button" onClick={() => this.selectionSort()}>selectionSort</button>
+                    <button className="button" onClick={() => this.insertionSort()}>insertionSort</button>
+                    <button className="button" onClick={() => this.testSortingAlgorithms()}>
+                        Test Sorting Algorithms (BROKEN)
         </button>
+                </div>
+
             </div>
         );
     }
