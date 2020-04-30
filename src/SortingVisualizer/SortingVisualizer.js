@@ -112,15 +112,15 @@ export default class SortingVisualizer extends React.Component {
     async insertionSort() {
         var arrayBars = document.getElementsByClassName('array-bar');
         for(let i = 1; i < arrayBars.length; i++){
-            let key = arrayBars[i].style.height ;
-
-            j = i-1;
-            while(j >= 0 && key < arrayBars[j].style.height ){
-                arrayBars[j+1] = arrayBars[j]
+            let j = i-1;
+            while(j >= 0 && parseInt(arrayBars[i].style.height) < parseInt(arrayBars[j].style.height)){
+                let temp1 = arrayBars[j+1].style.height;
+                let temp2 = arrayBars[j].style.height;
+                arrayBars[j+1].style.height = temp2;
+                arrayBars[j].style.height = temp1;
                 j-= 1
             }
-            arrBars[j + 1].style.length = key;    
-
+           // arrayBars[j + 1].style.height = arrayBars[i].style.height;
         }
         
         // for i in range(1, len(arr)): 
