@@ -146,7 +146,6 @@ export default class SortingVisualizer extends React.Component {
     async insertionSort() {
         await this.checkExecution()
         var arrayBars = document.getElementsByClassName('array-bar');
-        arrayBars[0].style.backgroundColor = 'green'
         for (let i = 1; i < arrayBars.length; i++) {
             let j = i - 1;
             console.log('outer' + i)
@@ -161,6 +160,7 @@ export default class SortingVisualizer extends React.Component {
                 await sleep(50)
             }
         }
+        arrayBars[arrayBars.length - 1].style.backgroundColor = 'red'
     }
 
     async bubbleSort() {
