@@ -25,7 +25,15 @@ export default class SortingVisualizer extends React.Component {
 
         this.state = {
             array: [],
-        };
+            title: <div className="description">
+                <p className="title"></p>
+                <p className="explanation"></p>
+                <p className="color1"></p>
+                <p className="color2"></p>
+                <p className="color3"></p>
+                <p className="color4"></p>
+            </div>
+        }
     }
 
     componentDidMount() {
@@ -67,6 +75,19 @@ export default class SortingVisualizer extends React.Component {
     async selectionSort() {
         const arr = document.getElementsByClassName('array-bar')
         const len = arr.length
+
+        //displaying a descrition of the type of sort
+        this.setState({
+            title: (<div className="description">
+                <p className="title">Selection Sort</p>
+                <p className="explanation">Finds the smallest element in the array and putting it at the beginning of the list and then repeating that process on the unsorted remainder of the data.</p>
+                <p className="color1">Green: Sorted</p>
+                <p className="color2">Grey: Current index being sorted</p>
+                <p className="color3">Yellow: Current scan</p>
+                <p className="color4">Purple: Possible hits</p>
+            </div>)
+        })
+
         //setting up an array deconstructor to swap the places passed in
         const swap = (arr, indx1, indx2) =>
             //array deconstructor to define what will be swapped
@@ -80,26 +101,26 @@ export default class SortingVisualizer extends React.Component {
             //looping through the rest of the array on top of first position
             for (let j = i + 1; j < len; j++) {
                 arr[j].style.backgroundColor = `yellow`
-                    await sleep(25)
-                    arr[j].style.backgroundColor = PRIMARY_COLOR
+                await sleep(5)
+                arr[j].style.backgroundColor = PRIMARY_COLOR
                 // checking if the next number in the array is less than our current position and if so setting the index equal to that number 
                 if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)) {
                     arr[j].style.backgroundColor = `purple`
                     indxOfMin = j
-                    
-                } 
-                
+
+                }
+
             }
-            
+
             if (indxOfMin !== i) {
                 console.log(`switch hit`)
                 swap(arr, indxOfMin, i)
-                await sleep(100)
+                //await sleep(100)
             }
             arr[i].style.backgroundColor = `green`
         }
         //returns the array newly sorted
-        
+
         return
     }
 
@@ -158,25 +179,40 @@ export default class SortingVisualizer extends React.Component {
         const { array } = this.state;
 
         return (
-            <div className="array-container">
-                {array.map((value, idx) => (
-                    <div
-                        className="array-bar"
-                        key={idx}
-                        style={{
-                            backgroundColor: PRIMARY_COLOR,
-                            height: `${value}px`,
-                        }}></div>
-                ))}
-                <button onClick={() => this.resetArray()}>Generate New Array</button>
-                <button onClick={() => this.mergeSort()}>Merge Sort</button>
-                <button onClick={() => this.quickSort()}>Quick Sort</button>
-                <button onClick={() => this.heapSort()}>Heap Sort</button>
-                <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
-                <button onClick={() => this.selectionSort()}>selectionSort</button>
-                <button onClick={() => this.testSortingAlgorithms()}>
-                    Test Sorting Algorithms (BROKEN)
+            <div className="container">
+                <div className="array-container">
+                    {array.map((value, idx) => (
+                        <div
+                            className="array-bar"
+                            key={idx}
+                            style={{
+                                backgroundColor: PRIMARY_COLOR,
+                                height: `${value}px`,
+                            }}></div>
+                    ))}
+                </div>
+
+                <div className="description">
+                    <p className="title"></p>
+                    <p className="explanation"></p>
+                    <p className="color1"></p>
+                    <p className="color2"></p>
+                    <p className="color3"></p>
+                    <p className="color4"></p>
+                </div>
+
+                <div className="button-container">
+                    <button className="button" onClick={() => this.resetArray()}>Generate New Array</button>
+                    <button className="button" onClick={() => this.mergeSort()}>Merge Sort</button>
+                    <button className="button" onClick={() => this.quickSort()}>Quick Sort</button>
+                    <button className="button" onClick={() => this.heapSort()}>Heap Sort</button>
+                    <button className="button" onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                    <button className="button" onClick={() => this.selectionSort()}>selectionSort</button>
+                    <button className="button" onClick={() => this.testSortingAlgorithms()}>
+                        Test Sorting Algorithms (BROKEN)
         </button>
+                </div>
+
             </div>
         );
     }

@@ -27,6 +27,17 @@ justify-content: center;
   color: #09d3ac;
 }
 
-.button{
+.button-container {
+  grid-row: 3;
+}
+
+.button {
+  color: white;
   background-color: blue !important;
+}
+
+
+.description{
+  grid-row: 1;
+  grid-column: 2;
 }
