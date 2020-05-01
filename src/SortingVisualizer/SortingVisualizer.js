@@ -9,9 +9,7 @@ let VariableAnimationSpeed = 10;
 
 let executing = true
 
-// Change this value for the number of bars (value) in the array.
-const NUMBER_OF_ARRAY_BARS = 100;
-
+// console.log(slider)
 // This is the main color of the array bars.
 const PRIMARY_COLOR = 'turquoise';
 
@@ -29,8 +27,29 @@ export default class SortingVisualizer extends React.Component {
             array: [],
             title: <h1 className="description">
                 Select a sort to get started!
-            </h1>
+            </h1>,
+            NUMBER_OF_ARRAY_BARS: 50,
+            barHeight: 700
         }
+    }
+
+
+    async barAmount(params) {
+        await this.setState({
+            NUMBER_OF_ARRAY_BARS: params.target.value
+        })
+        
+
+        this.resetArray()
+    }
+
+    async barHeight(params) {
+        await this.setState({
+            barHeight: params.target.value
+        })
+        
+
+        this.resetArray()
     }
 
     componentDidMount() {
@@ -39,9 +58,9 @@ export default class SortingVisualizer extends React.Component {
 
     resetArray() {
         const array = [];
-        for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
+        for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
 
-            array.push(randomIntFromInterval(5, 730));
+            array.push(randomIntFromInterval(5, this.state.barHeight));
         }
         this.setState({ array });
     }
@@ -139,8 +158,27 @@ export default class SortingVisualizer extends React.Component {
         // We leave it as an exercise to the viewer of this code to implement this method.
     }
 
-    async heapSort() {
-        // We leave it as an exercise to the viewer of this code to implement this method.
+    async heapSort(arr, length, i) {
+        // await this.checkExecution()
+
+        // let largest = i
+        // let left = i * 2 + 1
+        // let right = left + 1
+
+        // if (arr[left] > arr[largest]) {
+        //     largest = left
+        // }
+
+        // if (arr[left] > arr[largest]){
+        //     largest = right
+        // } 
+
+        // if (largest != i){
+        //     [arr[i], arr[largest]] = [arr[largest], arr[i]] 
+        //     this.heapSort(arr , arr.length, ++1)
+        // } 
+
+        // return
     }
 
     async insertionSort() {
@@ -225,6 +263,14 @@ export default class SortingVisualizer extends React.Component {
 
                 {this.state.title}
 
+                <div className="slide-container">
+                    <p className="barAmount">How many bars do you want?</p>
+                    <input id="myRange" className="number-of-bars" type="range" min="0" max="100" step="1" defaultValue="50" onChange={(e) => { this.barAmount(e) }} />
+
+                    <p className="barHeight">How high bars do you want?</p>
+                    <input id="myRange" className="height-of-bars" type="range" min="0" max="700" step="1" defaultValue="50" onChange={(e) => { this.barHeight(e) }} />
+                </div>
+
                 <div className="button-container">
                     <button className="button" onClick={() => this.resetArray()}>Generate New Array</button>
                     <button className="button" onClick={() => this.mergeSort()}>Merge Sort</button>
@@ -235,7 +281,7 @@ export default class SortingVisualizer extends React.Component {
                     <button className="button" onClick={() => this.insertionSort()}>insertionSort</button>
                     <button className="button" onClick={() => this.testSortingAlgorithms()}>
                         Test Sorting Algorithms (BROKEN)
-        </button>
+                    </button>
                 </div>
 
             </div>
