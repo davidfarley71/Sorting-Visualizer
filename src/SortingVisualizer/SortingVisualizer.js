@@ -1,11 +1,12 @@
 import React from 'react';
 import { getMergeSortAnimations } from '../sortingAlgorithms/sortingAlgorithms.js';
+import {quickSortHelper} from '../sortingAlgorithms/quickSort'
 import './SortingVisualizer.css';
 
 // Change this value for the speed of the animations.
-const ANIMATION_SPEED_MS = 1;
+const ANIMATION_SPEED_MS = 110;
 
-let VariableAnimationSpeed = 10;
+let VariableAnimationSpeed = 1100;
 
 let executing = true
 
@@ -38,6 +39,7 @@ export default class SortingVisualizer extends React.Component {
     }
 
     resetArray() {
+        executing = false;
         const array = [];
         for (let i = 0; i < NUMBER_OF_ARRAY_BARS; i++) {
 
@@ -53,9 +55,9 @@ export default class SortingVisualizer extends React.Component {
         console.log('executing' + executing)
     }
 
-    mergeSort() {
-        this.checkExecution()
-        const animations = getMergeSortAnimations(this.state.array);
+    async mergeSort() {
+        await this.checkExecution()
+        const animations = quickSortHelper(this.state.array);
         for (let i = 0; i < animations.length; i++) {
             if (!executing) return
             const arrayBars = document.getElementsByClassName('array-bar');
@@ -117,9 +119,7 @@ export default class SortingVisualizer extends React.Component {
                 if (parseInt(arr[j].style.height) < parseInt(arr[indxOfMin].style.height)) {
                     arr[j].style.backgroundColor = `purple`
                     indxOfMin = j
-
                 }
-
             }
 
             if (indxOfMin !== i) {
@@ -135,12 +135,35 @@ export default class SortingVisualizer extends React.Component {
 
 
 
-    quickSort() {
-        // We leave it as an exercise to the viewer of this code to implement this method.
+    async quickSort() {
+        await this.checkExecution()
+        const animations = quickSortHelper(this.state.array);
+        for (let i = 0; i < animations.length; i++) {
+            if (!executing) return
+            const arrayBars = document.getElementsByClassName('array-bar');
+            const isColorChange = i % 3 !== 2;
+            if (isColorChange) {
+                const [barOneIdx, barTwoIdx] = animations[i];
+                const barOneStyle = arrayBars[barOneIdx].style;
+                const barTwoStyle = arrayBars[barTwoIdx].style;
+                const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+                setTimeout(() => {
+                    barOneStyle.backgroundColor = color;
+                    barTwoStyle.backgroundColor = color;
+                }, i * ANIMATION_SPEED_MS);
+            } else {
+                setTimeout(() => {
+                    const [barOneIdx, newHeight] = animations[i];
+                    const barOneStyle = arrayBars[barOneIdx].style;
+                    barOneStyle.height = `${newHeight}px`;
+                }, i * ANIMATION_SPEED_MS);
+            }
+        }
     }
 
     async heapSort() {
         // We leave it as an exercise to the viewer of this code to implement this method.
+
     }
 
     async insertionSort() {
