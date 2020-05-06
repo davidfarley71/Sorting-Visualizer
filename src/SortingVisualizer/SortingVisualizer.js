@@ -160,16 +160,6 @@ export default class SortingVisualizer extends React.Component {
         console.log(animations)
         for (let i = 0; i < animations.length; i++) {
             if (!executing) return
-            // const isColorChange = i % 3 !== 2;
-            // if (isColorChange) {
-            //     const [barOneIndex, barTwoIndex] = animations[i];
-            //     const barOneStyle = arrayBars[barOneIndex].style;
-            //     const barTwoStyle = arrayBars[barTwoIndex].style;
-            //     const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-            //     barOneStyle.backgroundColor = color;
-            //     barTwoStyle.backgroundColor = color;
-            //     await sleep(this.state.AnimationSpeed)
-            // } else {
                 console.log('swap');
                 const [left, right] = animations[i];
                 const leftStyle = arrayBars[left].style.height;
@@ -178,7 +168,6 @@ export default class SortingVisualizer extends React.Component {
                 arrayBars[left].style.height = rightStyle;
                 arrayBars[right].style.height = leftStyle;
                 await sleep(this.state.AnimationSpeed)
-            // }
         }
     }
 
