@@ -49,7 +49,7 @@ export default class SortingVisualizer extends React.Component {
     async SetAnimationSpeed(params) {
         console.log(params.target.value)
         await this.setState({
-            AnimationSpeed: params.target.value
+            AnimationSpeed: params.target.value * 5
         })
     }
 
@@ -155,42 +155,77 @@ export default class SortingVisualizer extends React.Component {
     async quickSort() {
         await this.checkExecution()
         const arrayBars = document.getElementsByClassName('array-bar');
-       // const animations = quickSortHelper(this.state.array);
-       const animations = quicksortHelper(this.state.array)
+        // const animations = quickSortHelper(this.state.array);
+        const animations = quicksortHelper(this.state.array)
         console.log(animations)
         for (let i = 0; i < animations.length; i++) {
             if (!executing) return
-                console.log('swap');
-                const [left, right] = animations[i];
-                const leftStyle = arrayBars[left].style.height;
-                const rightStyle = arrayBars[right].style.height;
+            console.log('swap');
+            const [left, right] = animations[i];
+            const leftStyle = arrayBars[left].style.height;
+            const rightStyle = arrayBars[right].style.height;
 
-                arrayBars[left].style.height = rightStyle;
-                arrayBars[right].style.height = leftStyle;
-                await sleep(this.state.AnimationSpeed)
+            arrayBars[left].style.height = rightStyle;
+            arrayBars[right].style.height = leftStyle;
+            await sleep(this.state.AnimationSpeed)
         }
     }
 
-    async heapSort(arr, length, i) {
-        // await this.checkExecution()
 
-        // let largest = i
-        // let left = i * 2 + 1
-        // let right = left + 1
+    
+    async heapSort() {
 
-        // if (arr[left] > arr[largest]) {
-        //     largest = left
-        // }
+        const arr = document.getElementsByClassName('array-bar')
+        let array_length = arr.length
 
-        // if (arr[left] > arr[largest]){
-        //     largest = right
-        // } 
-
-        // if (largest != i){
-        //     [arr[i], arr[largest]] = [arr[largest], arr[i]] 
-        //     this.heapSort(arr , arr.length, ++1)
-        // } 
-        // return
+        
+        /* to create MAX  array */  
+        function heap_root(input, i) {
+            var left = 2 * i + 1;
+            var right = 2 * i + 2;
+            var max = i;
+        
+            if (left < array_length && input[left] > input[max]) {
+                max = left;
+            }
+        
+            if (right < array_length && input[right] > input[max])     {
+                max = right;
+            }
+        
+            if (max != i) {
+                swap(input, i, max);
+                heap_root(input, max);
+            }
+        }
+        
+        function swap(input, index_A, index_B) {
+            var temp = input[index_A];
+        
+            input[index_A] = input[index_B];
+            input[index_B] = temp;
+        }
+        
+        function heapSort(input) {
+            
+            array_length = input.length;
+        
+            for (var i = Math.floor(array_length / 2); i >= 0; i -= 1)      {
+                heap_root(input, i);
+              }
+        
+            for (i = input.length - 1; i > 0; i--) {
+                swap(input, 0, i);
+                array_length--;
+              
+              
+                heap_root(input, 0);
+            }
+        }
+        
+        
+        heapSort(arr);
+        console.log(arr);
     }
 
     async insertionSort() {
@@ -281,8 +316,8 @@ export default class SortingVisualizer extends React.Component {
 
                     <p className="barHeight">How high bars do you want?</p>
                     <input id="myRange" className="height-of-bars" type="range" min="0" max="700" step="1" defaultValue="50" onChange={(e) => { this.barHeight(e) }} />
-                    <p className="barHeight">Animation Speed:</p>
-                    <input id="myRange" className="AnimationSpeed" type="range" min="0" max="700" step="1" defaultValue="50" onChange={(e) => { this.SetAnimationSpeed(e) }} />
+                    <p className="animationSpeed">Animation Speed:</p>
+                    <input id="myRange" className="speed-of-animation" type="range" min="100" max="700" step="1" defaultValue="50" onChange={(e) => { this.SetAnimationSpeed(e) }} />
                 </div>
 
                 <div className="button-container">
