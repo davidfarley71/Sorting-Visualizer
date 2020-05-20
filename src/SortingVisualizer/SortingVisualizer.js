@@ -59,11 +59,10 @@ export default class SortingVisualizer extends React.Component {
 
     resetArray() {
         executing = false;
-        // const array = [];
-        // for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
-        //     array.push(randomIntFromInterval(5, this.state.barHeight));
-        // }
-        let array = [170, 174, 543, 183, 264, 622, 284, 576, 633, 491, 114, 629, 83, 677, 103, 468, 599, 47, 172, 345, 337, 306, 132, 267, 34, 699, 278, 329, 240, 624, 492, 482, 6, 261, 404, 25, 528, 666, 391, 309, 168, 699, 12, 158, 135, 127, 175, 35, 31, 368];
+        const array = [];
+        for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
+            array.push(randomIntFromInterval(5, this.state.barHeight));
+        }
         this.setState({ array });
     }
 
@@ -151,13 +150,12 @@ export default class SortingVisualizer extends React.Component {
         //returns the array newly sorted
         return
     }
-    
 
 
     async quickSort() {
         await this.checkExecution()
         const arrayBars = document.getElementsByClassName('array-bar');
-        console.log(this.state.array)       // const animations = quickSortHelper(this.state.array);
+       // const animations = quickSortHelper(this.state.array);
        const animations = quicksortHelper(this.state.array)
         console.log(animations)
         for (let i = 0; i < animations.length; i++) {
