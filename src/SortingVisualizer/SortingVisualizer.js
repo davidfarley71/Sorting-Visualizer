@@ -59,11 +59,19 @@ export default class SortingVisualizer extends React.Component {
 
     resetArray() {
         executing = false;
-        const array = [];
-        for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
-            array.push(randomIntFromInterval(5, this.state.barHeight));
+        console.log('test')
+        const array =[500, 495, 490, 485, 480, 475, 470, 465, 460, 455, 450, 445, 440, 435, 430, 425, 420, 415, 410, 405, 400, 395, 390, 385, 380, 375, 370, 365, 360, 355, 350, 345, 340, 335, 330, 325, 320, 315, 310, 305, 300, 295, 290, 285, 280, 275, 270, 265, 260, 255, 250, 245, 240, 235, 230, 225, 220, 215, 210, 205, 200, 195, 190, 185, 180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125, 120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5];
+        // for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
+        //     array.push(randomIntFromInterval(5, this.state.barHeight));
+        // }
+        const arrayBars = document.getElementsByClassName('array-bar');
+        for(let i of arrayBars){
+            i.remove()
         }
+       
+        
         this.setState({ array });
+        this.setState({ state: this.state });
     }
 
     async checkExecution() {
@@ -155,7 +163,6 @@ export default class SortingVisualizer extends React.Component {
     async quickSort() {
         await this.checkExecution()
         const arrayBars = document.getElementsByClassName('array-bar');
-        // const animations = quickSortHelper(this.state.array);
         const animations = quicksortHelper(this.state.array)
         console.log(animations)
         for (let i = 0; i < animations.length; i++) {
@@ -172,58 +179,58 @@ export default class SortingVisualizer extends React.Component {
     }
 
 
-    
+
     async heapSort() {
 
         const arr = document.getElementsByClassName('array-bar')
         let array_length = arr.length
 
-        
-        /* to create MAX  array */  
+
+        /* to create MAX  array */
         function heap_root(input, i) {
             var left = 2 * i + 1;
             var right = 2 * i + 2;
             var max = i;
-        
+
             if (left < array_length && input[left] > input[max]) {
                 max = left;
             }
-        
-            if (right < array_length && input[right] > input[max])     {
+
+            if (right < array_length && input[right] > input[max]) {
                 max = right;
             }
-        
+
             if (max != i) {
                 swap(input, i, max);
                 heap_root(input, max);
             }
         }
-        
+
         function swap(input, index_A, index_B) {
             var temp = input[index_A];
-        
+
             input[index_A] = input[index_B];
             input[index_B] = temp;
         }
-        
+
         function heapSort(input) {
-            
+
             array_length = input.length;
-        
-            for (var i = Math.floor(array_length / 2); i >= 0; i -= 1)      {
+
+            for (var i = Math.floor(array_length / 2); i >= 0; i -= 1) {
                 heap_root(input, i);
-              }
-        
+            }
+
             for (i = input.length - 1; i > 0; i--) {
                 swap(input, 0, i);
                 array_length--;
-              
-              
+
+
                 heap_root(input, 0);
             }
         }
-        
-        
+
+
         heapSort(arr);
         console.log(arr);
     }
