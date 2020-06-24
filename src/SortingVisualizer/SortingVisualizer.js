@@ -1,6 +1,6 @@
 import React from 'react';
 import { getMergeSortAnimations } from '../sortingAlgorithms/sortingAlgorithms.js';
-import { quicksortHelper, checker, quickSort } from '../sortingAlgorithms/quickSort'
+import { quicksortHelper } from '../sortingAlgorithms/quickSort'
 import './SortingVisualizer.css';
 
 // Change this value for the speed of the animations.
@@ -59,11 +59,12 @@ export default class SortingVisualizer extends React.Component {
 
     resetArray() {
         executing = false;
-        const array = [];
+        let array = []
         for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
             array.push(randomIntFromInterval(5, this.state.barHeight));
         }
         this.setState({ array });
+        this.setState({ state: this.state });
     }
 
     async checkExecution() {
@@ -155,12 +156,10 @@ export default class SortingVisualizer extends React.Component {
     async quickSort() {
         await this.checkExecution()
         const arrayBars = document.getElementsByClassName('array-bar');
-        // const animations = quickSortHelper(this.state.array);
         const animations = quicksortHelper(this.state.array)
-        console.log(animations)
         for (let i = 0; i < animations.length; i++) {
             if (!executing) return
-            console.log('swap');
+            console.log('quickSortSwap');
             const [left, right] = animations[i];
             const leftStyle = arrayBars[left].style.height;
             const rightStyle = arrayBars[right].style.height;
@@ -172,58 +171,58 @@ export default class SortingVisualizer extends React.Component {
     }
 
 
-    
+
     async heapSort() {
 
         const arr = document.getElementsByClassName('array-bar')
         let array_length = arr.length
 
-        
-        /* to create MAX  array */  
+
+        /* to create MAX  array */
         function heap_root(input, i) {
             var left = 2 * i + 1;
             var right = 2 * i + 2;
             var max = i;
-        
+
             if (left < array_length && input[left] > input[max]) {
                 max = left;
             }
-        
-            if (right < array_length && input[right] > input[max])     {
+
+            if (right < array_length && input[right] > input[max]) {
                 max = right;
             }
-        
+
             if (max != i) {
                 swap(input, i, max);
                 heap_root(input, max);
             }
         }
-        
+
         function swap(input, index_A, index_B) {
             var temp = input[index_A];
-        
+
             input[index_A] = input[index_B];
             input[index_B] = temp;
         }
-        
+
         function heapSort(input) {
-            
+
             array_length = input.length;
-        
-            for (var i = Math.floor(array_length / 2); i >= 0; i -= 1)      {
+
+            for (var i = Math.floor(array_length / 2); i >= 0; i -= 1) {
                 heap_root(input, i);
-              }
-        
+            }
+
             for (i = input.length - 1; i > 0; i--) {
                 swap(input, 0, i);
                 array_length--;
-              
-              
+
+
                 heap_root(input, 0);
             }
         }
-        
-        
+
+
         heapSort(arr);
         console.log(arr);
     }
@@ -292,12 +291,10 @@ export default class SortingVisualizer extends React.Component {
     }
 
     render() {
-        const { array } = this.state;
-
         return (
             <div className="container">
                 <div className="array-container">
-                    {array.map((value, idx) => (
+                    {this.state.array.map((value, idx) => (
                         <div
                             className="array-bar"
                             key={idx}
