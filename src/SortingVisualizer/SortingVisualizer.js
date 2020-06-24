@@ -102,7 +102,7 @@ export default class SortingVisualizer extends React.Component {
 
     async selectionSort() {
         this.checkExecution()
-        await sleep(500)
+        await sleep(this.state.AnimationSpeed)
         const arr = document.getElementsByClassName('array-bar')
         const len = arr.length
 
@@ -127,7 +127,7 @@ export default class SortingVisualizer extends React.Component {
         for (let i = 0; i < len; i++) {
             //setting a postion for the index's smallest location
             arr[i].style.backgroundColor = `grey`
-            let indxOfMin = i
+            let indxOfMin = i;
             //looping through the rest of the array on top of first position
             for (let j = i + 1; j < len; j++) {
                 if (!executing) return
@@ -152,7 +152,6 @@ export default class SortingVisualizer extends React.Component {
         return
     }
 
-
     async quickSort() {
         await this.checkExecution()
         const arrayBars = document.getElementsByClassName('array-bar');
@@ -164,34 +163,31 @@ export default class SortingVisualizer extends React.Component {
             const leftStyle = arrayBars[left].style.height;
             const rightStyle = arrayBars[right].style.height;
 
+            arrayBars[left].style.backgroundColor = 'red';
+            arrayBars[right].style.backgroundColor = 'red';
+
+            await sleep(this.state.AnimationSpeed)
             arrayBars[left].style.height = rightStyle;
             arrayBars[right].style.height = leftStyle;
-            await sleep(this.state.AnimationSpeed)
+            arrayBars[left].style.backgroundColor = 'turquoise';
+            arrayBars[right].style.backgroundColor = 'turquoise';
         }
     }
 
-
-
     async heapSort() {
-
         const arr = document.getElementsByClassName('array-bar')
         let array_length = arr.length
-
-
         /* to create MAX  array */
         function heap_root(input, i) {
             var left = 2 * i + 1;
             var right = 2 * i + 2;
             var max = i;
-
             if (left < array_length && input[left] > input[max]) {
                 max = left;
             }
-
             if (right < array_length && input[right] > input[max]) {
                 max = right;
             }
-
             if (max != i) {
                 swap(input, i, max);
                 heap_root(input, max);
@@ -206,23 +202,16 @@ export default class SortingVisualizer extends React.Component {
         }
 
         function heapSort(input) {
-
             array_length = input.length;
-
             for (var i = Math.floor(array_length / 2); i >= 0; i -= 1) {
                 heap_root(input, i);
             }
-
             for (i = input.length - 1; i > 0; i--) {
                 swap(input, 0, i);
                 array_length--;
-
-
                 heap_root(input, 0);
             }
         }
-
-
         heapSort(arr);
         console.log(arr);
     }
@@ -271,9 +260,6 @@ export default class SortingVisualizer extends React.Component {
         arrayBars[0].style.backgroundColor = 'green'
     }
 
-
-
-
     // NOTE: This method will only work if your sorting algorithms actually return
     // the sorted arrays; if they return the animations (as they currently do), then
     // this method will be broken.
@@ -313,7 +299,7 @@ export default class SortingVisualizer extends React.Component {
 
                     <p className="barHeight">How high bars do you want?</p>
                     <input id="myRange" className="height-of-bars" type="range" min="0" max="700" step="1" defaultValue="50" onChange={(e) => { this.barHeight(e) }} />
-                    <p className="animationSpeed">Animation Speed:</p>
+                    <p className="animationSpeed">Animation Delay:</p>
                     <input id="myRange" className="speed-of-animation" type="range" min="100" max="700" step="1" defaultValue="50" onChange={(e) => { this.SetAnimationSpeed(e) }} />
                 </div>
 
