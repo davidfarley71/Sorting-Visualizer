@@ -60,16 +60,18 @@ export default class SortingVisualizer extends React.Component {
     resetArray() {
         executing = false;
         console.log('test')
-        const array =[500, 495, 490, 485, 480, 475, 470, 465, 460, 455, 450, 445, 440, 435, 430, 425, 420, 415, 410, 405, 400, 395, 390, 385, 380, 375, 370, 365, 360, 355, 350, 345, 340, 335, 330, 325, 320, 315, 310, 305, 300, 295, 290, 285, 280, 275, 270, 265, 260, 255, 250, 245, 240, 235, 230, 225, 220, 215, 210, 205, 200, 195, 190, 185, 180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125, 120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5];
-        // for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
-        //     array.push(randomIntFromInterval(5, this.state.barHeight));
-        // }
+
+        // const array =[ 260, 255, 250, 245, 240, 235, 230, 225, 220, 215, 210, 205, 200, 195, 190, 185, 180, 175, 170, 165, 160, 155, 150, 145, 140, 135, 130, 125, 120, 115, 110, 105, 100, 95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5, 500, 495, 490, 485, 480, 475, 470, 465, 460, 455, 450, 445, 440, 435, 430, 425, 420, 415, 410, 405, 400, 395, 390, 385, 380, 375, 370, 365, 360, 355, 350, 345, 340, 335, 330, 325, 320, 315, 310, 305, 300, 295, 290, 285, 280, 275, 270, 265];
+        let array = []
+        for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
+            array.push(randomIntFromInterval(5, this.state.barHeight));
+        }
         const arrayBars = document.getElementsByClassName('array-bar');
-        for(let i of arrayBars){
+        for (let i of arrayBars) {
             i.remove()
         }
-       
-        
+
+        console.log(`The length is ${array.length}`)
         this.setState({ array });
         this.setState({ state: this.state });
     }
@@ -300,11 +302,13 @@ export default class SortingVisualizer extends React.Component {
 
     render() {
         const { array } = this.state;
+        console.log(this.state.array)
+
 
         return (
             <div className="container">
                 <div className="array-container">
-                    {array.map((value, idx) => (
+                    {this.state.array.map((value, idx) => (
                         <div
                             className="array-bar"
                             key={idx}
