@@ -117,7 +117,7 @@ export default class SortingVisualizer extends React.Component {
                 const barOneStyle = arrayBars[barOneIndex].style;
                 barOneStyle.height = `${newHeight}px`;
             }
-            if (i == animations.length - 1) this.setState({ disabledSlider: false })
+            if (i === animations.length - 1) this.setState({ disabledSlider: false })
         }
     }
 
@@ -231,7 +231,7 @@ export default class SortingVisualizer extends React.Component {
             if (right < array_length && input[right] > input[max]) {
                 max = right;
             }
-            if (max != i) {
+            if (max !== i) {
                 swap(input, i, max);
                 heap_root(input, max);
             }
