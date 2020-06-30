@@ -95,7 +95,6 @@ export default class SortingVisualizer extends React.Component {
             </div>)
         })
 
-
         const animations = getMergeSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
             if (!executing) {
