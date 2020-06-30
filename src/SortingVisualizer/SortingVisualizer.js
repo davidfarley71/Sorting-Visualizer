@@ -24,11 +24,10 @@ export default class SortingVisualizer extends React.Component {
         this.state = {
             array: [],
             AnimationSpeed: 10,
-            title: <h1 className="description">
-                Select a sort to get started!
-            </h1>,
+            title: <h1 className="description">Select a sort!</h1>,
             NUMBER_OF_ARRAY_BARS: 50,
-            barHeight: 700
+            barHeight: 700,
+            disabledSlider: false
         }
     }
 
@@ -49,7 +48,7 @@ export default class SortingVisualizer extends React.Component {
     async SetAnimationSpeed(params) {
         console.log(params.target.value)
         await this.setState({
-            AnimationSpeed: params.target.value * 5
+            AnimationSpeed: params.target.value
         })
     }
 
@@ -57,28 +56,52 @@ export default class SortingVisualizer extends React.Component {
         this.resetArray();
     }
 
-    resetArray() {
-        executing = false;
+    async resetArray() {
+        executing = false
         let array = []
         for (let i = 0; i < this.state.NUMBER_OF_ARRAY_BARS; i++) {
             array.push(randomIntFromInterval(5, this.state.barHeight));
         }
-        this.setState({ array });
-        this.setState({ state: this.state });
+        this.setState({
+            array,
+            disabledSlider: false,
+            title: <h1 className="description">Select a sort!</h1>
+        });
+        this.setState({})
+        const arrayBars = document.getElementsByClassName('array-bar');
+        for (let a = 0; a < arrayBars.length; a++) {
+            arrayBars[a].style.backgroundColor = "turquoise"
+        }
     }
 
     async checkExecution() {
         executing = false
+        this.setState({ disabledSlider: true })
         await sleep(500)
         executing = true
-        console.log('executing' + executing)
+        console.log('executing: ' + executing)
     }
 
     async mergeSort() {
         await this.checkExecution()
+        this.setState({
+            title: (<div className="description">
+                <h1 className="title">Merge Sort</h1>
+                <p className="explanation">This sort recursively splits the unsorted array in half until it cant anymore. Then it <i>merges</i> all the halves back together in reverse order, sorting as it goes.</p>
+                <h3>Worst complexity:O(n*log(n))</h3>
+                <h3>Average complexity: O(n*log(n))</h3>
+                <h3>Best complexity: O(n*log(n))</h3>
+                <h3>Space complexity: O(n) </h3>
+            </div>)
+        })
+
+
         const animations = getMergeSortAnimations(this.state.array);
         for (let i = 0; i < animations.length; i++) {
-            if (!executing) return
+            if (!executing) {
+                this.setState({ disabledSlider: false })
+                return
+            }
             const arrayBars = document.getElementsByClassName('array-bar');
             const isColorChange = i % 3 !== 2;
             if (isColorChange) {
@@ -86,22 +109,21 @@ export default class SortingVisualizer extends React.Component {
                 const barOneStyle = arrayBars[barOneIndex].style;
                 const barTwoStyle = arrayBars[barTwoIndex].style;
                 const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
-                setTimeout(() => {
-                    barOneStyle.backgroundColor = color;
-                    barTwoStyle.backgroundColor = color;
-                }, i * this.state.AnimationSpeed);
+                await sleep(this.state.AnimationSpeed)
+                barOneStyle.backgroundColor = color;
+                barTwoStyle.backgroundColor = color;
             } else {
-                setTimeout(() => {
-                    const [barOneIndex, newHeight] = animations[i];
-                    const barOneStyle = arrayBars[barOneIndex].style;
-                    barOneStyle.height = `${newHeight}px`;
-                }, i * this.state.AnimationSpeed);
+                await sleep(this.state.AnimationSpeed)
+                const [barOneIndex, newHeight] = animations[i];
+                const barOneStyle = arrayBars[barOneIndex].style;
+                barOneStyle.height = `${newHeight}px`;
             }
+            if (i == animations.length - 1) this.setState({ disabledSlider: false })
         }
     }
 
     async selectionSort() {
-        this.checkExecution()
+        await this.checkExecution()
         await sleep(this.state.AnimationSpeed)
         const arr = document.getElementsByClassName('array-bar')
         const len = arr.length
@@ -109,12 +131,15 @@ export default class SortingVisualizer extends React.Component {
         //displaying a descrition of the type of sort
         this.setState({
             title: (<div className="description">
-                <p className="title">Selection Sort</p>
-                <p className="explanation">Finds the smallest element in the array and putting it at the beginning of the list and then repeating that process on the unsorted remainder of the data.</p>
-                <p className="color1">Green: Sorted</p>
-                <p className="color2">Grey: Current index being sorted</p>
-                <p className="color3">Yellow: Current scan</p>
-                <p className="color4">Purple: Possible hits</p>
+                <h1 className="title">Selection Sort</h1>
+                <p className="explanation">Finds the smallest element in the array, and putts it at the beginning of the array. Its called selection sort because it marks the lowest value on each pass <i>here in purple</i> then when it reaches the end of each loop, the lowest value is "selected" to be swaped to the begining.</p>
+                <h3>Color legend</h3>
+                Green: Sorted, Grey: Current index being sorted, Yellow: Current scan, Purple: Possible hits
+               
+                <h3>Worst complexity:O(n^2)</h3>
+                <h3>Average complexity: O(n^2)</h3>
+                <h3>Best complexity: O(n^2)</h3>
+                <h3>Space complexity: O(1) </h3>
             </div>)
         })
 
@@ -130,7 +155,11 @@ export default class SortingVisualizer extends React.Component {
             let indxOfMin = i;
             //looping through the rest of the array on top of first position
             for (let j = i + 1; j < len; j++) {
-                if (!executing) return
+                if (!executing) {
+                    console.log('got hit')
+                    this.setState({ disabledSlider: false })
+                    return
+                }
                 arr[j].style.backgroundColor = `yellow`
                 await sleep(5)
                 arr[j].style.backgroundColor = PRIMARY_COLOR
@@ -148,16 +177,30 @@ export default class SortingVisualizer extends React.Component {
             }
             arr[i].style.backgroundColor = `green`
         }
+        this.setState({ disabledSlider: false })
         //returns the array newly sorted
         return
     }
 
     async quickSort() {
         await this.checkExecution()
+        this.setState({
+            title: (<div className="description">
+                <h1 className="title">Quick Sort</h1>
+                <p className="explanation">This sort recursively swaps values on either side of an arbitrary pivot index, in smaller and smaller increments until the whole array is sorted. This sort is the fastest on average, and is therefore considered the fastest sort.</p>
+                <h3>Worst complexity:O(n2)</h3>
+                <h3>Average complexity: O(n log n)</h3>
+                <h3>Best complexity: O(n log n)</h3>
+                <h3>Space complexity: O(n) </h3>
+            </div>)
+        })
         const arrayBars = document.getElementsByClassName('array-bar');
         const animations = quicksortHelper(this.state.array)
         for (let i = 0; i < animations.length; i++) {
-            if (!executing) return
+            if (!executing) {
+                this.setState({ disabledSlider: false })
+                return
+            }
             console.log('quickSortSwap');
             const [left, right] = animations[i];
             const leftStyle = arrayBars[left].style.height;
@@ -172,6 +215,7 @@ export default class SortingVisualizer extends React.Component {
             arrayBars[left].style.backgroundColor = 'turquoise';
             arrayBars[right].style.backgroundColor = 'turquoise';
         }
+        this.setState({ disabledSlider: false })
     }
 
     async heapSort() {
@@ -214,16 +258,30 @@ export default class SortingVisualizer extends React.Component {
         }
         heapSort(arr);
         console.log(arr);
+        this.setState({ disabledSlider: false })
     }
 
     async insertionSort() {
         await this.checkExecution()
+        this.setState({
+            title: (<div className="description">
+                <h1 className="title">Insertion Sort</h1>
+                <p className="explanation">This sort swaps each value backwards until it is less than the value previous, <i>inserting</i> it there. Then it starts over again with the next unsorted value until the array is sorted.</p>
+                <h3>Worst complexity:O(n^2)</h3>
+                <h3>Average complexity: O(n^2)</h3>
+                <h3>Best complexity: O(n)</h3>
+                <h3>Space complexity: O(1) </h3>
+            </div>)
+        })
         var arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 1; i < arrayBars.length; i++) {
             let j = i - 1;
             console.log('outer' + i)
             while (j >= 0 && parseInt(arrayBars[j + 1].style.height) < parseInt(arrayBars[j].style.height)) {
-                if (!executing) return
+                if (!executing) {
+                    this.setState({ disabledSlider: false })
+                    return
+                }
                 let temp1 = arrayBars[j + 1].style.height;
                 let temp2 = arrayBars[j].style.height;
                 arrayBars[j + 1].style.height = temp2;
@@ -234,16 +292,30 @@ export default class SortingVisualizer extends React.Component {
             }
         }
         arrayBars[arrayBars.length - 1].style.backgroundColor = 'red'
+        this.setState({ disabledSlider: false })
     }
 
     async bubbleSort() {
         await this.checkExecution()
+        this.setState({
+            title: (<div className="description">
+                <h1 className="title">Bubble Sort</h1>
+                <p className="explanation">This sort loops through the array, every time it finds a value that is greater than the one previous, it swaps it forward. This <i>bubbles</i> the largest value up the to the top of the array.</p>
+                <h3>Worst complexity:O(n^2)</h3>
+                <h3>Average complexity: O(n^2)</h3>
+                <h3>Best complexity: O(n)</h3>
+                <h3>Space complexity: O(1) </h3>
+            </div>)
+        })
         var arrayBars = document.getElementsByClassName('array-bar');
         for (let i = 0; i < arrayBars.length - 1; i++) {
             let b = 0;
             console.log(`outer loop: ${i}`)
             while (b < arrayBars.length - i - 1) {
-                if (!executing) return
+                if (!executing) {
+                    this.setState({ disabledSlider: false })
+                    return
+                }
                 console.log(`inner loop: ${b}`)
                 if (parseInt(arrayBars[b].style.height) > parseInt(arrayBars[b + 1].style.height)) {
                     let temp1 = arrayBars[b].style.height;
@@ -257,64 +329,54 @@ export default class SortingVisualizer extends React.Component {
                 ++b;
             }
         };
-        arrayBars[0].style.backgroundColor = 'green'
-    }
-
-    // NOTE: This method will only work if your sorting algorithms actually return
-    // the sorted arrays; if they return the animations (as they currently do), then
-    // this method will be broken.
-    testSortingAlgorithms() {
-        for (let i = 0; i < 100; i++) {
-            const array = [];
-            const length = randomIntFromInterval(1, 1000);
-            for (let i = 0; i < length; i++) {
-                array.push(randomIntFromInterval(-1000, 1000));
-            }
-            const javaScriptSortedArray = array.slice().sort((a, b) => a - b);
-            const mergeSortedArray = getMergeSortAnimations(array.slice());
-            console.log(arraysAreEqual(javaScriptSortedArray, mergeSortedArray));
-        }
+        arrayBars[0].style.backgroundColor = 'red'
+        this.setState({ disabledSlider: false })
     }
 
     render() {
         return (
-            <div className="container">
+            <div className="gridContainer">
+                <div className='display'>
+                    {this.state.title}
+                    <div className="slide-container">
+                        <span className="slider">
+                            <h2 className="slider-text barAmount">Size of array to sort: {this.state.NUMBER_OF_ARRAY_BARS}</h2>
+                            <input className="slider-input number-of-bars" type="range" min="30" max="200" step="1" disabled={this.state.disabledSlider} value={this.state.NUMBER_OF_ARRAY_BARS} onChange={(e) => { this.barAmount(e) }} />
+                        </span>
+                        <span className="slider">
+                            <h2 className="slider-text barHeight">Height of the array to sort: {this.state.barHeight}</h2>
+                            <input className="slider-input height-of-bars" type="range" min="100" max="800" step="1" disabled={this.state.disabledSlider} value={this.state.barHeight} onChange={(e) => { this.barHeight(e) }} />
+                        </span>
+                        <span className="slider">
+                            <h2 className="slider-text animationSpeed">Animation Delay in miliseconds: {this.state.AnimationSpeed}</h2>
+                            <input className="slider-input animationSpeed" type="range" min="10" max="500" step="1" disabled={this.state.disabledSlider} value={this.state.AnimationSpeed} onChange={(e) => { this.SetAnimationSpeed(e) }} />
+                        </span>
+                    </div>
+
+                    <div className="button-container">
+                        <button className="generateNewArrayButton" onClick={() => this.resetArray()}>Stop and Generate New Array</button>
+                        <button className="button" onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                        <button className="button" onClick={() => this.insertionSort()}>insertionSort</button>
+                        <button className="button" onClick={() => this.selectionSort()}>selectionSort</button>
+                        <button className="button" onClick={() => this.mergeSort()}>Merge Sort</button>
+                        <button className="button" onClick={() => this.quickSort()}>Quick Sort</button>
+                        {/* <button className="button" onClick={() => this.heapSort()}>Heap Sort</button> */}
+                    </div>
+                </div>
+
+
                 <div className="array-container">
                     {this.state.array.map((value, idx) => (
                         <div
                             className="array-bar"
                             key={idx}
                             style={{
-                                backgroundColor: PRIMARY_COLOR,
+                                backgroundColor: "turquoise",
                                 height: `${value}px`,
                             }}></div>
                     ))}
                 </div>
 
-                {this.state.title}
-
-                <div className="slide-container">
-                    <p className="barAmount">How many bars do you want?</p>
-                    <input id="myRange" className="number-of-bars" type="range" min="0" max="100" step="1" defaultValue="50" onChange={(e) => { this.barAmount(e) }} />
-
-                    <p className="barHeight">How high bars do you want?</p>
-                    <input id="myRange" className="height-of-bars" type="range" min="0" max="700" step="1" defaultValue="50" onChange={(e) => { this.barHeight(e) }} />
-                    <p className="animationSpeed">Animation Delay:</p>
-                    <input id="myRange" className="speed-of-animation" type="range" min="100" max="700" step="1" defaultValue="50" onChange={(e) => { this.SetAnimationSpeed(e) }} />
-                </div>
-
-                <div className="button-container">
-                    <button className="button" onClick={() => this.resetArray()}>Generate New Array</button>
-                    <button className="button" onClick={() => this.mergeSort()}>Merge Sort</button>
-                    <button className="button" onClick={() => this.quickSort()}>Quick Sort</button>
-                    <button className="button" onClick={() => this.heapSort()}>Heap Sort</button>
-                    <button className="button" onClick={() => this.bubbleSort()}>Bubble Sort</button>
-                    <button className="button" onClick={() => this.selectionSort()}>selectionSort</button>
-                    <button className="button" onClick={() => this.insertionSort()}>insertionSort</button>
-                    <button className="button" onClick={() => this.testSortingAlgorithms()}>
-                        Test Sorting Algorithms (BROKEN)
-                    </button>
-                </div>
 
             </div>
         );
