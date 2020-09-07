@@ -1,3 +1,52 @@
+html body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: black;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+
+
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+}
+
+
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #09d3ac;
+}
+.display{
+  margin: 20px;
+}
+
 
 .gridContainer {
   display: grid;
@@ -5,6 +54,7 @@
   grid-template-columns: 1fr 2fr;
   justify-content: center;
   margin-left: 10px;
+  height: 100vh;
 }
 
 @media only screen and (max-width: 500px){
@@ -21,6 +71,7 @@
   grid-column: '1 / 3';
   position: relative;
   top: 10px;
+  align-content: bottom;
 }
 
 .array-bar {
@@ -40,7 +91,7 @@
   display: block;
   margin: 10px auto  0px  auto ;
   color: white;
-  background-color: purple;
+  background-color: red;
 }
 
 

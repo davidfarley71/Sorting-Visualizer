@@ -77,6 +77,7 @@ export default class SortingVisualizer extends React.Component {
     async checkExecution() {
         executing = false
         this.setState({ disabledSlider: true })
+        await this.resetArray();
         await sleep(500)
         executing = true
         console.log('executing: ' + executing)
